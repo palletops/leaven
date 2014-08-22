@@ -7,12 +7,16 @@
 (defn start
   "Start a component."
   [component]
-  (protocols/start component))
+  (if (satisfies? ILifecycle component)
+    (protocols/start component)
+    component))
 
 (defn stop
   "Stop a component."
   [component]
-  (protocols/stop component))
+  (if (satisfies? ILifecycle component)
+    (protocols/stop component)
+    component))
 
 (defn status
   "Ask a component for its status."
