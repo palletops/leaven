@@ -31,8 +31,8 @@
   implement ILifecycle and IStatus by calling the protocol methods
   on each of the components."
   [record-name components]
-  (letfn [(start-subcomp [k] `(update-in [~k] protocols/start))
-          (stop-subcomp [k] `(update-in [~k] protocols/stop))
+  (letfn [(start-subcomp [k] `(update-in [~k] start))
+          (stop-subcomp [k] `(update-in [~k] stop))
           (status-subcomp [k] `(update-in [~k] status))]
     `(defrecord ~record-name
          [~@(map (comp symbol name) components)]
