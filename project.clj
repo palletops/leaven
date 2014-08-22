@@ -11,6 +11,6 @@
   :source-paths ["target/generated/src/clj"]
   :resource-paths ["target/generated/src/cljs"]
   :test-paths ["target/generated/test/clj"]
-  :aliases {"auto-test" ["do" "clean," "cljsbuild" "auto" "test"]
+  :aliases {"auto-test" ["do" "clean," "cljx," "cljsbuild" "auto" "test"]
             "jar" ["do" "cljx," "jar"]
             "test" ["do" "cljx," "test"]})
