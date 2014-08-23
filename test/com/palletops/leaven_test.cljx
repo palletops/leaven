@@ -46,3 +46,34 @@
     (let [s2 (stop s1)]
       (is (= [:b1 :b2] @start-a) "Stop propagates state")
       (is (= [:b2 :b1] @stop-a)) "Stops in reverse order")))
+
+(defrecord TestThrow []
+  ILifecycle
+  (start [c] (throw (ex-info "start-failed" {})))
+  (stop [c] (throw (ex-info "stop-failed" {}))))
+
+(defn test-throw-system []
+  (->TestSystem
+   (->TestA :a)
+   (->TestThrow)))
+
+(deftest exception-test
+  (let [s (test-throw-system)]
+    (is (thrown-with-msg? #+cljs js/Error #+clj Exception
+                          #"Exception while starting.*"
+                 (start s)))
+    (is (thrown? #+cljs js/Error #+clj Exception
+                 #"Exception while stopping.*"
+                 (stop s)))
+    (try
+      (start s)
+      (catch #+cljs js/Error #+clj Exception e
+             (let [{:keys [component system sub-components completed]}
+                   (ex-data e)]
+               (is (= :b2 component) "Reports the failed component"))))
+    (try
+      (stop s)
+      (catch #+cljs js/Error #+clj Exception e
+             (let [{:keys [component system sub-components completed]}
+                   (ex-data e)]
+               (is (= :b2 component) "Reports the failed component"))))))

@@ -87,8 +87,8 @@ for leaven.
 The [Component][Component] framework pioneered a component model for
 clojure, and provides an excellent rationale for components.
 
-We wanted something that
-- didn't do namespace dependency management
+We wanted something that:
+- did explicit dependency order, with no need for a `using` function,
 - would work in clojurescript
 
 ## License
