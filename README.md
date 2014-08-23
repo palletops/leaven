@@ -1,12 +1,10 @@
 # leaven
 
-> _leav·en_  /ˈlevən/
-
-> noun
->  - a pervasive influence that modifies something or transforms it for the better.
+> __leav·en__  /ˈlevən/
 >
-> verb
->  - permeate and modify or transform (something) for the better.
+> noun  - a pervasive influence that modifies something or transforms it for the better.
+>
+> verb  - permeate and modify or transform (something) for the better.
 
 A lightweight component model for clojure and clojurescript.
 
