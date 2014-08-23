@@ -28,8 +28,10 @@
 (defmacro defsystem
   "Macro to build a system defrecord out of `components`, a sequence
   of keywords that specify the sub-components.  The record will
-  implement ILifecycle and IStatus by calling the protocol methods
-  on each of the components."
+  implement ILifecycle and IStatus by calling the protocol methods on
+  each of the components.  The `start` method calls the sub-components
+  in the specified order.  The `stop` method calls the sub-components
+  in the reverse order."
   [record-name components]
   (letfn [(start-subcomp [k] `(update-in [~k] start))
           (stop-subcomp [k] `(update-in [~k] stop))
