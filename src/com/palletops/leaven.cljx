@@ -1,28 +1,37 @@
 (ns com.palletops.leaven
   "A component composition library."
   (:require
-   [com.palletops.leaven.protocols :as protocols
-    :refer [ILifecycle IStatus]]))
+   [com.palletops.leaven.protocols :as protocols]))
 
 (defn start
   "Start a component."
   [component]
-  (if (satisfies? ILifecycle component)
+  (if (protocols/lifecycle? component)
     (protocols/start component)
     component))
 
 (defn stop
   "Stop a component."
   [component]
-  (if (satisfies? ILifecycle component)
+  (if (protocols/lifecycle? component)
     (protocols/stop component)
     component))
 
 (defn status
   "Ask a component for its status."
   [component]
-  (if (satisfies? IStatus component)
+  (if (protocols/status? component)
     (protocols/status component)))
+
+(defn lifecycle?
+  "Predicate for testing whether `x` satisfies the ILifecycle protocol."
+  [x]
+  (protocols/lifecycle? x))
+
+(defn status?
+  "Predicate for testing whether `x` satisfies the IStatus protocol."
+  [x]
+  (protocols/status? x))
 
 
 (defn ^:internal apply-components
@@ -66,11 +75,11 @@
   (let [rcomponents (vec (reverse components))]
     `(defrecord ~record-name
          [~@(map (comp symbol name) components)]
-       ILifecycle
+       protocols/ILifecycle
        (~'start [component#]
          (apply-components start component# ~components "starting"))
        (~'stop [component#]
          (apply-components stop component# ~rcomponents "stopping"))
-       IStatus
+       protocols/IStatus
        (~'status [component#]
          (apply-components status component# ~rcomponents "querying status")))))

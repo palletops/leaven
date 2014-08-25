@@ -62,7 +62,7 @@
     (is (thrown-with-msg? #+cljs js/Error #+clj Exception
                           #"Exception while starting.*"
                  (start s)))
-    (is (thrown? #+cljs js/Error #+clj Exception
+    (is (thrown-with-msg? #+cljs js/Error #+clj Exception
                  #"Exception while stopping.*"
                  (stop s)))
     (try

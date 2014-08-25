@@ -1,5 +1,6 @@
 {:provided {:dependencies [[org.clojure/clojure "1.6.0"]
-                           [org.clojure/clojurescript "0.0-2277"]]}
+                           [org.clojure/clojurescript "0.0-2277"]
+                           [prismatic/schema "0.2.6"]]}
 
  :dev {:cljx {:builds [{:source-paths ["src"]
                         :output-path "target/generated/src/clj"
