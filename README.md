@@ -18,6 +18,10 @@ For users of components, `com.palletops.leaven` provides the `start`
 and `stop` functions, and the `defsystem` macro.  There is also a
 `status` function that can be used with components that support it.
 
+Both `start` and `stop` take a single component as an argument and
+return an updated component - components are normally immutable, so
+you should always use the updated component in the return value.
+
 The `defsystem` macro is used to define a composite component, made up
 of a map of components, each identified by a keyword.  The
 sub-components are specified as a vector of keywords, and are started
