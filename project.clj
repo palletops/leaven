@@ -13,4 +13,5 @@
   :test-paths ["target/generated/test/clj"]
   :aliases {"auto-test" ["do" "clean," "cljx," "cljsbuild" "auto" "test"]
             "jar" ["do" "cljx," "jar"]
+            "install" ["do" "cljx," "install"]
             "test" ["do" "cljx," "test"]})
