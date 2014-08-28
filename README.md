@@ -10,7 +10,7 @@ A lightweight component model for clojure and clojurescript.
 
 ## Install
 
-Add `[com.palletops/leaven "0.1.0-SNAPSHOT"]` to your `:dependencies`.
+Add `[com.palletops/leaven "0.1.1"]` to your `:dependencies`.
 
 ## Usage
 
