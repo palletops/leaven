@@ -2,7 +2,8 @@
                            [org.clojure/clojurescript "0.0-2277"]
                            [prismatic/schema "0.2.6"]]}
 
- :dev {:plugins [[com.cemerick/austin "0.1.5"]
+ :dev {:plugins [[lein-pallet-release "RELEASE"]
+                 [com.cemerick/austin "0.1.5"]
                  [com.cemerick/clojurescript.test "0.3.1"]
                  [com.keminglabs/cljx "0.4.0"]
                  [lein-cljsbuild "1.0.3"]]
