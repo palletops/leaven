@@ -3,9 +3,7 @@
   :url "https://github.com/palletops/leaven"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :plugins [[com.keminglabs/cljx "0.4.0"]
-            [com.cemerick/clojurescript.test "0.3.1"]
-            [lein-cljsbuild "1.0.3"]]
+  :dependencies [[com.palletops/api-builder "0.3.0"]]
   :hooks [leiningen.cljsbuild]
   :prep-tasks ["cljx" "javac" "compile"]
   :source-paths ["target/generated/src/clj"]
@@ -14,4 +12,5 @@
   :aliases {"auto-test" ["do" "clean," "cljx," "cljsbuild" "auto" "test"]
             "jar" ["do" "cljx," "jar"]
             "install" ["do" "cljx," "install"]
-            "test" ["do" "cljx," "test"]})
+            "test" ["do" "cljx," "test"]}
+  :cljsbuild {:builds []})

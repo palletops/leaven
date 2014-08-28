@@ -2,7 +2,11 @@
                            [org.clojure/clojurescript "0.0-2277"]
                            [prismatic/schema "0.2.6"]]}
 
- :dev {:cljx {:builds [{:source-paths ["src"]
+ :dev {:plugins [[com.cemerick/austin "0.1.5"]
+                 [com.cemerick/clojurescript.test "0.3.1"]
+                 [com.keminglabs/cljx "0.4.0"]
+                 [lein-cljsbuild "1.0.3"]]
+       :cljx {:builds [{:source-paths ["src"]
                         :output-path "target/generated/src/clj"
                         :rules :clj}
                        {:source-paths ["src"]

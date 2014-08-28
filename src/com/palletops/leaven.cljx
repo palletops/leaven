@@ -1,38 +1,52 @@
 (ns com.palletops.leaven
   "A component composition library."
+  #+clj
   (:require
-   [com.palletops.leaven.protocols :as protocols]))
+   [com.palletops.leaven.protocols :as protocols]
+   [com.palletops.api-builder.api :refer [defn-api]]
+   [schema.core :as schema])
+  #+cljs
+  (:require-macros
+   [com.palletops.api-builder.api :refer [defn-api]])
+  #+cljs
+  (:require
+   [com.palletops.leaven.protocols :as protocols]
+   [schema.core :as schema]))
 
-(defn start
+(defn-api start
   "Start a component."
+  {:sig [[schema/Any :- schema/Any]]}
   [component]
   (if (protocols/lifecycle? component)
     (protocols/start component)
     component))
 
-(defn stop
+(defn-api stop
   "Stop a component."
+  {:sig [[schema/Any :- schema/Any]]}
   [component]
   (if (protocols/lifecycle? component)
     (protocols/stop component)
     component))
 
-(defn status
+(defn-api status
   "Ask a component for its status."
+  {:sig [[schema/Any :- schema/Any]]}
   [component]
   (if (protocols/status? component)
     (protocols/status component)))
 
-(defn lifecycle?
+(defn-api lifecycle?
   "Predicate for testing whether `x` satisfies the ILifecycle protocol."
+  {:sig [[schema/Any :- schema/Any]]}
   [x]
   (protocols/lifecycle? x))
 
-(defn status?
+(defn-api status?
   "Predicate for testing whether `x` satisfies the IStatus protocol."
+  {:sig [[schema/Any :- schema/Any]]}
   [x]
   (protocols/status? x))
-
 
 (defn ^:internal apply-components
   "Execute a function on a sequence of components from a record.
@@ -64,7 +78,7 @@
       rec)))
 
 #+clj
-(defmacro defsystem
+(defmacro ^:api defsystem
   "Macro to build a system defrecord out of `components`, a sequence
   of keywords that specify the sub-components.  The record will
   implement ILifecycle and IStatus by calling the protocol methods on
