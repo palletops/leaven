@@ -4,13 +4,16 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[com.palletops/api-builder "0.3.0"]]
-  :hooks [leiningen.cljsbuild]
-  :prep-tasks ["cljx" "javac" "compile"]
+  :hooks [cljx.hooks leiningen.cljsbuild]
+  :prep-tasks ["javac" "compile"]
   :source-paths ["target/generated/src/clj"]
   :resource-paths ["target/generated/src/cljs"]
   :test-paths ["target/generated/test/clj"]
-  :aliases {"auto-test" ["do" "clean," "cljx," "cljsbuild" "auto" "test"]
-            "jar" ["do" "cljx," "jar"]
-            "install" ["do" "cljx," "install"]
-            "test" ["do" "cljx," "test"]}
-  :cljsbuild {:builds []})
+  :aliases {"auto-test" ["do" "clean," "cljsbuild" "auto" "test"]}
+  :cljsbuild {:builds []}
+  :cljx {:builds [{:source-paths ["src"]
+                   :output-path "target/generated/src/clj"
+                   :rules :clj}
+                  {:source-paths ["src"]
+                   :output-path "target/generated/src/cljs"
+                   :rules :cljs}]})
