@@ -1,4 +1,4 @@
-(defproject com.palletops/leaven "0.1.0-SNAPSHOT"
+(defproject com.palletops/leaven "0.1.0"
   :description "A lightweight component library for clojure and clojurescript."
   :url "https://github.com/palletops/leaven"
   :license {:name "Eclipse Public License"
