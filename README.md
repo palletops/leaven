@@ -84,7 +84,14 @@ for leaven.
               :db db}))))
 ```
 
+## Library authors
 
+Library authors are encouraged to provide a leaven component in a
+separate namespace.  By making the dependency on leaven have a
+`provided` scope, you do not force the dependency on your users.
+
+In [leiningen][leiningen], you can make a dependency have `provided`
+scop by adding it under the `:provided` profile.
 
 ## Why another component library?
 
@@ -103,3 +110,4 @@ Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
 
 [Component]:https://github.com/stuartsierra/component "Stuart Sierra's Component"
+[leiningen]:https://github.com/technomancy/leiningen "Leiningen"
