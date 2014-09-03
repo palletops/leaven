@@ -29,6 +29,9 @@ in the order specified and stop in the reverse order.  The macro
 defines a record, and you instantiate the record with the
 sub-component instances.
 
+You can specify a body in `defsystem`, just as you would to
+`defrecord`, in order to implement other protocols on your system.
+
 For component providers, `com.palletops.leaven.protocols` provides the
 `ILifecycle` protocol, and requires the implementation of the `start`
 and `stop` methods.  The `IStatus` protocol provides for a `status`
