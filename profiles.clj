@@ -8,6 +8,7 @@
                  [com.cemerick/clojurescript.test "0.3.1"]
                  [lein-cljsbuild "1.0.3"]
                  [com.keminglabs/cljx "0.4.0"]]
+       :dependencies [[org.clojure/core.async "0.1.338.0-5c5012-alpha"]]
        :cljx {:builds [{:source-paths ["test"]
                         :output-path "target/generated/test/clj"
                         :rules :clj}

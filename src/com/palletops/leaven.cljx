@@ -84,11 +84,15 @@
   implement ILifecycle and IStatus by calling the protocol methods on
   each of the components.  The `start` method calls the sub-components
   in the specified order.  The `stop` method calls the sub-components
-  in the reverse order."
-  [record-name components]
+  in the reverse order.
+
+  A body can be supplied as used by defrecord, to implement extra
+  protocols on the system."
+  [record-name components & body]
   (let [rcomponents (vec (reverse components))]
     `(defrecord ~record-name
          [~@(map (comp symbol name) components)]
+       ~@body
        protocols/ILifecycle
        (~'start [component#]
          (apply-components start component# ~components "starting"))
