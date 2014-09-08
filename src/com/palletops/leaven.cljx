@@ -17,7 +17,7 @@
   "Start a component."
   {:sig [[schema/Any :- schema/Any]]}
   [component]
-  (if (protocols/lifecycle? component)
+  (if (protocols/startable? component)
     (protocols/start component)
     component))
 
@@ -25,7 +25,7 @@
   "Stop a component."
   {:sig [[schema/Any :- schema/Any]]}
   [component]
-  (if (protocols/lifecycle? component)
+  (if (protocols/stoppable? component)
     (protocols/stop component)
     component))
 
@@ -33,20 +33,26 @@
   "Ask a component for its status."
   {:sig [[schema/Any :- schema/Any]]}
   [component]
-  (if (protocols/status? component)
+  (if (protocols/queryable? component)
     (protocols/status component)))
 
-(defn-api lifecycle?
-  "Predicate for testing whether `x` satisfies the ILifecycle protocol."
+(defn-api startable?
+  "Predicate for testing whether `x` satisfies the Startable protocol."
   {:sig [[schema/Any :- schema/Any]]}
   [x]
-  (protocols/lifecycle? x))
+  (protocols/startable? x))
 
-(defn-api status?
+(defn-api stoppable?
+  "Predicate for testing whether `x` satisfies the Stoppable protocol."
+  {:sig [[schema/Any :- schema/Any]]}
+  [x]
+  (protocols/stoppable? x))
+
+(defn-api queryable?
   "Predicate for testing whether `x` satisfies the IStatus protocol."
   {:sig [[schema/Any :- schema/Any]]}
   [x]
-  (protocols/status? x))
+  (protocols/queryable? x))
 
 (defn ^:internal apply-components
   "Execute a function on a sequence of components from a record.
@@ -93,11 +99,12 @@
     `(defrecord ~record-name
          [~@(map (comp symbol name) components)]
        ~@body
-       protocols/ILifecycle
+       protocols/Startable
        (~'start [component#]
          (apply-components start component# ~components "starting"))
+       protocols/Stoppable
        (~'stop [component#]
          (apply-components stop component# ~rcomponents "stopping"))
-       protocols/IStatus
+       protocols/Queryable
        (~'status [component#]
          (apply-components status component# ~rcomponents "querying status")))))

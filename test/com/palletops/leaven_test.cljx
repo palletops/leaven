@@ -2,7 +2,7 @@
   #+clj
   (:require
    [com.palletops.leaven :as leaven :refer [start stop defsystem]]
-   [com.palletops.leaven.protocols :refer [ILifecycle]]
+   [com.palletops.leaven.protocols :refer [Startable Stoppable]]
    [clojure.test :refer [is deftest testing]])
   #+cljs
   (:require-macros
@@ -11,12 +11,13 @@
   #+cljs
   (:require
    [com.palletops.leaven :as leaven :refer [start stop]]
-   [com.palletops.leaven.protocols :as impl :refer [ILifecycle]]
+   [com.palletops.leaven.protocols :as impl :refer [Startable Stoppable]]
    [cemerick.cljs.test :as t]))
 
 (defrecord TestA [s]
-  ILifecycle
+  Startable
   (start [c] c)
+  Stoppable
   (stop [c] c))
 
 (deftest x
@@ -25,8 +26,9 @@
     (is (= a (stop a)))))
 
 (defrecord TestB [start-a stop-a v]
-  ILifecycle
+  Startable
   (start [c] (update-in c [:start-a] swap! (fnil conj []) v))
+  Stoppable
   (stop [c] (update-in c [:stop-a] swap! (fnil conj []) v)))
 
 (defsystem TestSystem [:b1 :b2])
@@ -48,8 +50,9 @@
       (is (= [:b2 :b1] @stop-a)) "Stops in reverse order")))
 
 (defrecord TestThrow []
-  ILifecycle
+  Startable
   (start [c] (throw (ex-info "start-failed" {})))
+  Stoppable
   (stop [c] (throw (ex-info "stop-failed" {}))))
 
 (defn test-throw-system []
