@@ -10,7 +10,7 @@ A lightweight component model for clojure and clojurescript.
 
 ## Install
 
-Add `[com.palletops/leaven "0.1.2"]` to your `:dependencies`.
+Add `[com.palletops/leaven "0.2.0"]` to your `:dependencies`.
 
 ## Usage
 
@@ -29,29 +29,33 @@ in the order specified and stop in the reverse order.  The macro
 defines a record, and you instantiate the record with the
 sub-component instances.
 
+You can specify a body in `defsystem`, just as you would to
+`defrecord`, in order to implement other protocols on your system.
+
 For component providers, `com.palletops.leaven.protocols` provides the
-`ILifecycle` protocol, and requires the implementation of the `start`
-and `stop` methods.  The `IStatus` protocol provides for a `status`
-method.
+`Startable` and `Stoppable` protocols, that require the implementation
+of the `start` and `stop` methods respectively.  The `Queryable`
+protocol provides for a `status` method.
 
 ### Example
 
 We define a component that will provide an increasing sequence of
-numbers via a `core.async` channel.  We implement the `ILifecycle`
-protocol for the component.
+numbers via a `core.async` channel.  We implement the `Startable` and
+`Stoppable` protocols for the component.
 
 ```clj
 (require '[clojure.core.async :as async]
          '[com.palletops.leaven :as leaven]
-         '[com.palletops.leaven.protocols :refer [ILifecycle])
+         '[com.palletops.leaven.protocols :refer [Startable Stoppable])
 
 (defrecord Counter [init-val channel loop-chan]
-  ILifecycle
+  Startable
   (start [component]
     (assoc component :loop-chan
            (async/go-loop [n init-val]
              (async/>! channel n)
              (recur (inc n)))))
+  Stoppable
   (stop [component]
     (async/close! channel)
     (assoc component :loop-chan nil)))
@@ -105,7 +109,7 @@ will double what is put into it.
 
 ```clj
 (defrecord Doubler [in-chan out-chan ctrl-chan loop-chan]
-  ILifecycle
+  Startable
   (start [component]
     (let [ctrl-chan (async/chan)]
       (assoc component
@@ -119,6 +123,7 @@ will double what is put into it.
                                (recur))))))
                      (async/close! out-chan))
         :ctrl-chan ctrl-chan)))
+  Stoppable
   (stop [component]
     (async/>!! ctrl-chan ::stop)
     (assoc component :loop-chan nil :ctrl-chan nil)))
@@ -153,7 +158,7 @@ for leaven.
   (:require [com.palletops.leaven :as leaven]))
 
 (defrecord Database [host port connection]
-  leaven/ILifecycle
+  leaven/Startable
   (start [component]
     (let [conn (connect-to-database host port)]
       (assoc component :connection conn)))
@@ -166,7 +171,7 @@ for leaven.
   (map->Database {:host host :port port}))
 
 (defrecord ExampleComponent [options cache database]
-  leaven/ILifecycle
+  leaven/Stoppable
   (start [this]
     (assoc this :admin (get-user database "admin")))
 

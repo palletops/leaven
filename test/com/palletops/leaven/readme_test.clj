@@ -1,21 +1,22 @@
 (ns com.palletops.leaven.readme-test
   (:require
    [com.palletops.leaven :as leaven]
-   [com.palletops.leaven.protocols :refer [ILifecycle]]
+   [com.palletops.leaven.protocols :refer [Startable Stoppable]]
    [clojure.core.async :as async]
    [clojure.test :refer :all]))
 
 ;; We define a component that will provide an increasing sequence of
-;; numbers via a `core.async` channel.  We implement the `ILifecycle`
+;; numbers via a `core.async` channel.  We implement the `Startable`
 ;; protocol for the component.
 
 (defrecord Counter [init-val channel loop-chan]
-  ILifecycle
+  Startable
   (start [component]
     (assoc component :loop-chan
            (async/go-loop [n init-val]
              (async/>! channel n)
              (recur (inc n)))))
+  Stoppable
   (stop [component]
     (async/close! channel)
     (assoc component :loop-chan nil)))
@@ -43,7 +44,7 @@
   (is (nil? (async/<!! c))))
 
 (defrecord Doubler [in-chan out-chan ctrl-chan loop-chan]
-  ILifecycle
+  Startable
   (start [component]
     (let [ctrl-chan (async/chan)]
       (assoc component
@@ -57,6 +58,7 @@
                                (recur))))))
                      (async/close! out-chan))
         :ctrl-chan ctrl-chan)))
+  Stoppable
   (stop [component]
     (async/>!! ctrl-chan ::stop)
     (assoc component :loop-chan nil :ctrl-chan nil)))

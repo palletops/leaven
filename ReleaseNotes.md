@@ -1,3 +1,12 @@
+## 0.2.0
+
+- Break ILifecycle into Startable and Stoppable
+  Allow components to implement `start` and `stop` individually as required.
+
+  This is a breaking change.
+
+  Closes #1
+
 ## 0.1.2
 
 - Allow defsystem to take a body

@@ -1,8 +1,8 @@
 (ns com.palletops.leaven.schema-test
   #+clj
   (:require
-   [com.palletops.leaven :refer [defsystem lifecycle? status?]]
-   [com.palletops.leaven.schema :refer [ILifecycle IStatus]]
+   [com.palletops.leaven :refer [defsystem startable? stoppable? queryable?]]
+   [com.palletops.leaven.schema :refer [Startable Stoppable Queryable]]
    [schema.core :as schema]
    [clojure.test :refer [is deftest testing]])
   #+cljs
@@ -11,21 +11,25 @@
    [com.palletops.leaven :refer [defsystem]])
   #+cljs
   (:require
-   [com.palletops.leaven :refer [lifecycle? status?]]
-   [com.palletops.leaven.schema :refer [ILifecycle IStatus]]
+   [com.palletops.leaven :refer [startable? stoppable? queryable?]]
+   [com.palletops.leaven.schema :refer [Startable Stoppable Queryable]]
    [cemerick.cljs.test :as t]
    [schema.core :as schema]))
 
 (defsystem A [])
 
 (deftest schema-test
-  (is (lifecycle? (->A)))
-  (is (status? (->A)))
+  (is (startable? (->A)))
+  (is (stoppable? (->A)))
+  (is (queryable? (->A)))
   (testing "success"
-    (is (schema/validate ILifecycle (->A)))
-    (is (schema/validate IStatus (->A))))
+    (is (schema/validate Startable (->A)))
+    (is (schema/validate Stoppable (->A)))
+    (is (schema/validate Queryable (->A))))
   (testing "failure"
     (is (thrown? #+cljs js/Error #+clj Exception
-                 (schema/validate ILifecycle {})))
+                 (schema/validate Startable {})))
     (is (thrown? #+cljs js/Error #+clj Exception
-                 (schema/validate IStatus {})))))
+                 (schema/validate Stoppable {})))
+    (is (thrown? #+cljs js/Error #+clj Exception
+                 (schema/validate Queryable {})))))

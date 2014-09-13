@@ -1,25 +1,32 @@
 (ns com.palletops.leaven.protocols
   "Protocols for leaven components")
 
-(defprotocol ILifecycle
+(defprotocol Startable
   "Basic lifecycle for a component."
   (start [component]
-    "Start a component. Returns an updated component.")
+    "Start a component. Returns an updated component."))
+
+(defprotocol Stoppable
   (stop [component]
     "Stop a component. Returns an updated component."))
 
-(defn lifecycle?
-  "Predicate for testing whether `x` satisfies the ILifecycle protocol."
-  [x]
-  (satisfies? ILifecycle x))
-
-(defprotocol IStatus
+(defprotocol Queryable
   "Allows a component to implement a status function, which may just
   have side effects (like logging)."
   (status [component]
     "Allow a component to be queried for status."))
 
-(defn status?
+(defn startable?
+  "Predicate for testing whether `x` satisfies the Startable protocol."
+  [x]
+  (satisfies? Startable x))
+
+(defn stoppable?
+  "Predicate for testing whether `x` satisfies the Stoppable protocol."
+  [x]
+  (satisfies? Stoppable x))
+
+(defn queryable?
   "Predicate for testing whether `x` satisfies the IStatus protocol."
   [x]
-  (satisfies? IStatus x))
+  (satisfies? Queryable x))
