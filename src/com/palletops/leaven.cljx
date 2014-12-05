@@ -87,21 +87,21 @@
 (defmacro ^:api defsystem
   "Macro to build a system defrecord out of `components`, a sequence
   of keywords that specify the sub-components.  The record will
-  implement ILifecycle and IStatus by calling the protocol methods on
-  each of the components.  The `start` method calls the sub-components
-  in the specified order.  The `stop` method calls the sub-components
-  in the reverse order.
-
+  implement Startable, Stoppable and Queryable by calling the protocol
+  methods on each of the components.  The `start` method calls the
+  sub-components in the specified order.  The `stop` method calls the
+  sub-components in the reverse order.
   A body can be supplied as used by defrecord, to implement extra
   protocols on the system."
   [record-name components & body]
-  (let [rcomponents (vec (reverse components))]
-    `(defrecord ~record-name
-         [~@(map (comp symbol name) components)]
+  (let [component-syms (mapv (comp symbol name) components)
+        component-kws (mapv (comp keyword name) components)
+        rcomponents (vec (reverse component-kws))]
+    `(defrecord ~record-name [~@component-syms]
        ~@body
        protocols/Startable
        (~'start [component#]
-         (apply-components start component# ~components "starting"))
+         (apply-components start component# ~component-kws "starting"))
        protocols/Stoppable
        (~'stop [component#]
          (apply-components stop component# ~rcomponents "stopping"))

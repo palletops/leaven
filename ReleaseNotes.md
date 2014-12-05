@@ -1,3 +1,10 @@
+## 0.2.1
+
+- Use symbols for components in defsystem
+  Makes defsystem consistent with defrecord and deftype.
+
+  Closes #3
+
 ## 0.2.0
 
 - Break ILifecycle into Startable and Stoppable
