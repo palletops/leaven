@@ -132,7 +132,7 @@ will double what is put into it.
 We'll use these components to define a system
 
 ```clj
-(leaven/defsystem Evens [:counter :doubler])
+(leaven/defsystem Evens [counter doubler])
 (defn evens [out-chan]
   (let [c1 (async/chan)]
     (Evens.
@@ -183,7 +183,7 @@ for leaven.
                           :options config-options
                           :cache (atom {})}))
 
-(defsystem ExampleSystem [:db :app])
+(defsystem ExampleSystem [db app])
 
 (defn example-system [config-options]
   (let [{:keys [host port]} config-options

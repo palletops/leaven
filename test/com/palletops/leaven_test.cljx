@@ -82,7 +82,7 @@
                (is (= :b2 component) "Reports the failed component"))))))
 
 (defprotocol P (p [_] "return a :p"))
-(defsystem TestExtend [:b1 :b2]
+(defsystem TestExtend [b1 b2]
   P
   (p [_] :p))
 

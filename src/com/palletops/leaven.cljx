@@ -94,13 +94,14 @@
   A body can be supplied as used by defrecord, to implement extra
   protocols on the system."
   [record-name components & body]
-  (let [rcomponents (vec (reverse components))]
-    `(defrecord ~record-name
-         [~@(map (comp symbol name) components)]
+  (let [component-syms (mapv (comp symbol name) components)
+        component-kws (mapv (comp keyword name) components)
+        rcomponents (vec (reverse component-kws))]
+    `(defrecord ~record-name [~@component-syms]
        ~@body
        protocols/Startable
        (~'start [component#]
-         (apply-components start component# ~components "starting"))
+         (apply-components start component# ~component-kws "starting"))
        protocols/Stoppable
        (~'stop [component#]
          (apply-components stop component# ~rcomponents "stopping"))
