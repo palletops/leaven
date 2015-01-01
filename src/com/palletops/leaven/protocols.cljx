@@ -27,6 +27,6 @@
   (satisfies? Stoppable x))
 
 (defn queryable?
-  "Predicate for testing whether `x` satisfies the IStatus protocol."
+  "Predicate for testing whether `x` satisfies the Queryable protocol."
   [x]
   (satisfies? Queryable x))

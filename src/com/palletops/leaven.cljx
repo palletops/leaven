@@ -49,7 +49,7 @@
   (protocols/stoppable? x))
 
 (defn-api queryable?
-  "Predicate for testing whether `x` satisfies the IStatus protocol."
+  "Predicate for testing whether `x` satisfies the Queryable protocol."
   {:sig [[schema/Any :- schema/Any]]}
   [x]
   (protocols/queryable? x))
