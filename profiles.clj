@@ -1,7 +1,6 @@
 {:provided {:dependencies [[org.clojure/clojure "1.6.0"]
                            [org.clojure/clojurescript "0.0-2277"]
-                           [prismatic/schema "0.2.6"]
-                           [com.keminglabs/cljx "0.5.0"]]}
+                           [prismatic/schema "0.2.6"]]}
 
  :cljs-test {:cljx
              {:builds
@@ -49,10 +48,12 @@
                ;;              :pretty-print true}}
                ]}
              }
+ :cljx {:dependencies [[com.keminglabs/cljx "0.5.0"]]
+        ;; plugin doesn't seem to add this now?
+        :repl-options {:nrepl-middleware [cljx.repl-middleware/wrap-cljx]}}
  :dev-base {:plugins [[lein-pallet-release "RELEASE"]
                       [com.cemerick/austin "0.1.5"]
                       [com.cemerick/clojurescript.test "0.3.3"]
-                      [lein-cljsbuild "1.0.3"]
-                      [com.keminglabs/cljx "0.5.0"]]}
- :dev [:dev-base :cljs-test]
+                      [lein-cljsbuild "1.0.3"]]}
+ :dev [:dev-base :cljx :cljs-test]
  :test [:cljs-test]}
