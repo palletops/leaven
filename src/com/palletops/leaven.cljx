@@ -69,20 +69,27 @@
             res (try
                   (-> (update-in rec [c] f)
                       (cond-> post-f (post-f c)))
-                  (catch #+cljs js/Error #+clj Exception e
-                         (throw
-                          (ex-info
-                           (str "Exception while " operation-name
-                                " " c
-                                " system sub-component.")
-                           {:system rec
-                            :component c
-                            :sub-components sub-components
-                            :completed (subvec sub-components
-                                               0 (- (count sub-components)
-                                                    (count cs)))
-                            :uncompleted cs}
-                           e))))]
+                  (catch #+cljs js/Error #+clj Throwable e
+                         (let [d (ex-data e)]
+                           (throw
+                            (ex-info
+                             (str "Exception while " operation-name
+                                  " " c
+                                  " system sub-component.")
+                             (merge
+                              {:system rec
+                               :component c
+                               :sub-components sub-components
+                               :completed (subvec sub-components
+                                                  0 (- (count sub-components)
+                                                       (count cs)))
+                               :uncompleted cs
+                               :operation-name operation-name
+                               :type ::system-failed}
+                              (if (= ::system-failed (:type d))
+                                ;; ensure we report the most nested details
+                                d))
+                             e)))))]
         (recur res (rest cs)))
       rec)))
 
