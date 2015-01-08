@@ -141,7 +141,7 @@
 
   {:on-start
     {:sub-comp1 (update-subcomponent :sub-comp2)
-     :sub-comp2 #(assoc-in %1 [:sub-comp2 :comp1] %3)}}
+     :sub-comp2 #(assoc-in %1 [:sub-comp3 :comp1] %3)}}
 
   A body can be supplied as used by defrecord, to implement extra
   protocols on the system."
