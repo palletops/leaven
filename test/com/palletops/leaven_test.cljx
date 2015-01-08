@@ -121,3 +121,23 @@
                                     :b2 {:b11 c}})
         ss (start s)]
     (is (= ::v (get-in ss [:b2 :b11 :v])))))
+
+(defsystem TestSystemOptions3 [:b1 :b2]
+  {:depends {:b2 [:b1]}})
+
+(deftest defsystem-options-depends-vector-test
+  (let [c (TestComp. nil)
+        s (map->TestSystemOptions3 {:b1 c
+                                    :b2 {:b1 c}})
+        ss (start s)]
+    (is (= ::v (get-in ss [:b2 :b1 :v])))))
+
+(defsystem TestSystemOptions4 [:b1 :b2]
+  {:depends {:b2 {:b1 :b11}}})
+
+(deftest defsystem-options-depends-map-test
+  (let [c (TestComp. nil)
+        s (map->TestSystemOptions4 {:b1 c
+                                    :b2 {:b11 c}})
+        ss (start s)]
+    (is (= ::v (get-in ss [:b2 :b11 :v])))))

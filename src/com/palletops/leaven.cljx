@@ -125,6 +125,38 @@
         (f2 :channel))))
 
 #+clj
+(defn dependents
+  "Invert the specified dependencies."
+  [depends]
+  (reduce
+   (fn [res [k deps]]
+     (if (map? deps)
+       (reduce
+        (fn [res [sk sv]]
+          (assoc-in res [sk k] sv))
+        res deps)
+       (reduce
+        (fn [res sk]
+          (assoc-in res [sk k] sk))
+        res deps)))
+   {}
+   depends))
+
+#+clj
+(defn process-depends
+  "Convert :depends into :on-start and :on-stop function declarations."
+  [{:keys [depends] :as options}]
+  (reduce
+   (fn [res [k v]]
+     (let [f `(update-components ~v)]
+       (-> res
+           (assoc-in [:on-start k] f)
+           (assoc-in [:on-stop k] f))))
+   (dissoc options :depends)
+   (dependents depends)))
+
+
+#+clj
 (defmacro ^:api defsystem
   "Macro to build a system defrecord out of `components`, a sequence
   of keywords that specify the sub-components.  The record will
@@ -133,15 +165,33 @@
   sub-components in the specified order.  The `stop` method calls the
   sub-components in the reverse order.
 
-  An option map may be supplied after the sub-component vector.  This
-  can be used to pass functions that are called after the
-  sub-component is operated on. Each function must take component, and
-  sub-component keyword, and return a possibly modified component map.
-  Values can be specified for :on-start and :on-stop.
+  An option map may be supplied after the sub-component vector.
+
+  The :depends key can be used to specify components that depend on
+  each system component.  The value must be a map where the keys are
+  keywords and the values are either a sequence of (system component)
+  keywords, or a map from (system component) keyword to a keyword
+  specifying the key to be updated in that component.  A simple
+  keyword is used for the case where the sub-component keyword matches
+  the component key.  A map entry is used when the keyword needs to be
+  translated.
+
+  {:depends
+    {:sub-comp2 [:sub-comp1]
+     :sub-comp3 {:sub-comp1 :comp1}}}
+
+  The :on-start and :on-stop key can be used to pass functions that
+  are called after the sub-component is operated on. Each function
+  must take component, and sub-component keyword, and return a
+  possibly modified component map.
 
   {:on-start
     {:sub-comp1 (update-subcomponent :sub-comp2)
      :sub-comp2 #(assoc-in %1 [:sub-comp3 :comp1] %3)}}
+
+  The :depends map is used to generate :on-start and :on-stop
+  functions, which will override any specified :on-start and :on-stop
+  values.
 
   A body can be supplied as used by defrecord, to implement extra
   protocols on the system."
@@ -150,7 +200,7 @@
         component-kws (mapv (comp keyword name) components)
         rcomponents (vec (reverse component-kws))
         options (let [opts (first body)]
-                  (if (map? opts) opts))
+                  (if (map? opts) (process-depends opts)))
         body (if options
                (rest body)
                body)
