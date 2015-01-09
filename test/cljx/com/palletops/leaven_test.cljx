@@ -1,7 +1,8 @@
 (ns com.palletops.leaven-test
   #+clj
   (:require
-   [com.palletops.leaven :as leaven :refer [start stop defsystem]]
+   [com.palletops.leaven :as leaven
+    :refer [start stop defsystem startable? stoppable? update-components]]
    [com.palletops.leaven.protocols :refer [Startable Stoppable]]
    [clojure.test :refer [is deftest testing]])
   #+cljs
@@ -10,7 +11,8 @@
    [com.palletops.leaven :refer [defsystem]])
   #+cljs
   (:require
-   [com.palletops.leaven :as leaven :refer [start stop]]
+   [com.palletops.leaven :as leaven
+    :refer [start stop startable? stoppable? update-components]]
    [com.palletops.leaven.protocols :as impl :refer [Startable Stoppable]]
    [cemerick.cljs.test :as t]))
 
@@ -88,3 +90,54 @@
 
 (deftest defsystem-extend-test
   (is (= :p (p (TestExtend. nil nil)))))
+
+
+(defrecord TestComp [v]
+  Startable
+  (start [component]
+    (assoc component :v ::v)))
+
+(defsystem SystemOptionsTest [:b1 :b2]
+  {:on-start {:b1 (update-components [:b2])}
+   :on-stop {:b1 #(assoc-in %1 [%2 :v] nil)}})
+
+(deftest defsystem-options-test
+  (let [c (TestComp. nil)
+        s (map->SystemOptionsTest {:b1 c
+                                   :b2 {:b1 c}})]
+    (is (nil? (get-in s [:b2 :b1 :v])))
+    (let [ss (start s)]
+      (is (= ::v (get-in ss [:b2 :b1 :v])))
+      (let [st (stop ss)]
+        (is (nil? (get-in st [:b1 :v])))
+        (is (= ::v (get-in ss [:b2 :b1 :v])))))))
+
+(defsystem TestSystemOptions2 [:b1 :b2]
+  {:on-start {:b1 (update-components {:b2 :b11})}})
+
+(deftest defsystem-options-on-start-map-test
+  (let [c (TestComp. nil)
+        s (map->TestSystemOptions2 {:b1 c
+                                    :b2 {:b11 c}})
+        ss (start s)]
+    (is (= ::v (get-in ss [:b2 :b11 :v])))))
+
+(defsystem TestSystemOptions3 [:b1 :b2]
+  {:depends {:b2 [:b1]}})
+
+(deftest defsystem-options-depends-vector-test
+  (let [c (TestComp. nil)
+        s (map->TestSystemOptions3 {:b1 c
+                                    :b2 {:b1 c}})
+        ss (start s)]
+    (is (= ::v (get-in ss [:b2 :b1 :v])))))
+
+(defsystem TestSystemOptions4 [:b1 :b2]
+  {:depends {:b2 {:b1 :b11}}})
+
+(deftest defsystem-options-depends-map-test
+  (let [c (TestComp. nil)
+        s (map->TestSystemOptions4 {:b1 c
+                                    :b2 {:b11 c}})
+        ss (start s)]
+    (is (= ::v (get-in ss [:b2 :b11 :v])))))

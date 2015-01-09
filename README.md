@@ -10,7 +10,7 @@ A lightweight component model for clojure and clojurescript.
 
 ## Install
 
-Add `[com.palletops/leaven "0.2.1"]` to your `:dependencies`.
+Add `[com.palletops/leaven "0.3.0"]` to your `:dependencies`.
 
 ## Usage
 
@@ -23,14 +23,32 @@ return an updated component - components are normally immutable, so
 you should always use the updated component in the return value.
 
 The `defsystem` macro is used to define a composite component, made up
-of a map of components, each identified by a keyword.  The
-sub-components are specified as a vector of keywords, and are started
+of a map of components, each identified by a symbol.  The
+sub-components are specified as a vector of symbols, and are started
 in the order specified and stop in the reverse order.  The macro
 defines a record, and you instantiate the record with the
 sub-component instances.
 
 You can specify a body in `defsystem`, just as you would to
 `defrecord`, in order to implement other protocols on your system.
+
+You can pass a map of options to defsystem, after the component names
+and before any body.
+
+The `:depends` option takes a map from system component to the
+components it depends on, and ensures components see the started
+versions of their dependencies.  If the dependent components are named
+the same as the component, then a sequence of keywords is used as the
+value for the map entry.  If the dependent components have different
+names, then a map is used from the component keyword to the matching
+dependent component keyword. Note that this does not (currently)
+influence the component ordering.
+
+The `:on-start` and `:on-stop` options are used to specify functions
+that will be called when a component is started or stopped.  The value
+is a map from the component keyword to a function that takes the
+system and the keyword of the started component, and returns a
+possibly updated system.
 
 For component providers, `com.palletops.leaven.protocols` provides the
 `Startable` and `Stoppable` protocols, that require the implementation

@@ -39,6 +39,7 @@
   (is (= 1 (async/<!! c)))
   (is (= 2 (async/<!! c)))
   (is (= 3 (async/<!! c)))
+  (Thread/sleep 100)
   (alter-var-root #'counter leaven/stop)
   (is (= 4 (async/<!! c)))
   (is (nil? (async/<!! c))))
