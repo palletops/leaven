@@ -6,16 +6,16 @@
   :dependencies [[com.palletops/api-builder "0.3.0"]]
   :plugins [[com.keminglabs/cljx "0.5.0"]]
   :prep-tasks [["cljx" "once"]]
-  :source-paths ["target/generated/src/clj"]
+  :source-paths ["src/clj" "target/generated/src/clj"]
   :resource-paths ["target/generated/src/cljs"]
   :test-paths ["target/generated/test/clj"]
   :aliases {"compile" ["do" "compile," "cljsbuild" "once"]
             "test" ["do" "test," "cljsbuild" "once" "test," "cljsbuild" "test"]
             "auto-test" ["do" "clean," "cljsbuild" "auto" "test"]}
   :cljsbuild {:builds []}
-  :cljx {:builds [{:source-paths ["src"]
+  :cljx {:builds [{:source-paths ["src/cljx"]
                    :output-path "target/generated/src/clj"
                    :rules :clj}
-                  {:source-paths ["src"]
+                  {:source-paths ["src/cljx"]
                    :output-path "target/generated/src/cljs"
                    :rules :cljs}]})
