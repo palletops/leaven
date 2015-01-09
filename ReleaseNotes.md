@@ -1,3 +1,26 @@
+## 0.3.0
+
+- Add type extenders for component interop
+  Adds extend-leaven and extend-component for converting component types to
+  Leaven and Components, respectively.
+
+- Add :depends option
+  Adds an option to specify dependencies of a system sub-component using a
+  declarative map.  The map is used to ensure dependencies are updated when
+  a system starts or stops.
+
+- Ensure deepest exception is propagated
+  When an exception occurs on a system operation, ensure the returned system
+  map is from the deepest exception (and has the most correct state).
+
+- Add options to defsystem
+  Allow passing of per sub-component on-start and on-stop functions to
+  defsystem.  This enables, for example, propogation of the started
+  component to other sub-components.
+
+  Adds an update-components function that can be used to update dependent
+  components and can be used as an on-start function.
+
 ## 0.2.1
 
 - Use symbols for components in defsystem
