@@ -208,7 +208,6 @@
     `(do
        (def ~option-sym ~options) ; defrecord functions can't access lexical scope
        (defrecord ~record-name [~@component-syms]
-         ~@body
          protocols/Startable
          (~'start [component#]
            (apply-components
@@ -220,4 +219,5 @@
          protocols/Queryable
          (~'status [component#]
            (apply-components
-            status component# ~rcomponents "querying status" nil))))))
+            status component# ~rcomponents "querying status" nil))
+         ~@body))))
