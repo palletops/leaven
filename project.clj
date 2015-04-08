@@ -3,7 +3,8 @@
   :url "https://github.com/palletops/leaven"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[com.palletops/api-builder "0.3.0"]]
+  :dependencies [[com.palletops/api-builder "0.3.0"]
+                 [prismatic/schema "0.4.0"]]
   :plugins [[com.keminglabs/cljx "0.5.0"]]
   :prep-tasks [["cljx" "once"]]
   :source-paths ["src/clj" "target/generated/src/clj"]
