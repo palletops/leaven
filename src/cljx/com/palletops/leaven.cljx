@@ -8,7 +8,7 @@
   #+cljs
   (:require-macros
    [com.palletops.api-builder.api :refer [defn-api]]
-   [schema.macros :refer [=>]])
+   [schema.core :refer [=>]])
   #+cljs
   (:require
    [com.palletops.leaven.protocols :as protocols]
