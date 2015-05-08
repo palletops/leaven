@@ -10,7 +10,7 @@ A lightweight component model for clojure and clojurescript.
 
 ## Install
 
-Add `[com.palletops/leaven "0.3.0"]` to your `:dependencies`.
+Add `[com.palletops/leaven "0.3.1"]` to your `:dependencies`.
 
 ## Usage
 

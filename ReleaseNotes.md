@@ -1,3 +1,13 @@
+## 0.3.1
+
+- Move user-provided protocol impls after generic
+  This allows the user to provide their own versions of start, stop, or
+  status for systems.
+
+- Update api-builder and build tool versions
+
+- Bump prismatic schema to version 0.4.0
+
 ## 0.3.0
 
 - Add type extenders for component interop
