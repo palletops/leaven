@@ -1,9 +1,9 @@
-(defproject com.palletops/leaven "0.3.0"
+(defproject com.palletops/leaven "0.3.1"
   :description "A lightweight component library for clojure and clojurescript."
   :url "https://github.com/palletops/leaven"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[com.palletops/api-builder "0.3.0"]]
+  :dependencies [[com.palletops/api-builder "0.3.1"]]
   :plugins [[com.keminglabs/cljx "0.5.0"]]
   :prep-tasks [["cljx" "once"]]
   :source-paths ["src/clj" "target/generated/src/clj"]
