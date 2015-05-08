@@ -1,6 +1,5 @@
 {:provided {:dependencies [[org.clojure/clojure "1.6.0"]
-                           [org.clojure/clojurescript "0.0-2277"]
-                           [prismatic/schema "0.2.6"]
+                           [org.clojure/clojurescript "0.0-3211"]
                            [com.stuartsierra/component "0.2.2"]]}
 
  :cljs-test {:cljx
@@ -51,12 +50,12 @@
              }
  :clj-test {:test-paths ["test/clj" "target/generated/test/clj"]
             :dependencies [[org.clojure/core.async "0.1.346.0-17112a-alpha"]]}
- :cljx {:dependencies [[com.keminglabs/cljx "0.5.0"]]
+ :cljx {:dependencies [[com.keminglabs/cljx "0.6.0"]]
         ;; plugin doesn't seem to add this now?
         :repl-options {:nrepl-middleware [cljx.repl-middleware/wrap-cljx]}}
  :dev-base {:plugins [[lein-pallet-release "RELEASE"]
-                      [com.cemerick/austin "0.1.5"]
+                      [com.cemerick/austin "0.1.6"]
                       [com.cemerick/clojurescript.test "0.3.3"]
-                      [lein-cljsbuild "1.0.3"]]}
+                      [lein-cljsbuild "1.0.5"]]}
  :dev [:dev-base :cljx :cljs-test :clj-test]
  :test [:cljs-test :clj-test]}
