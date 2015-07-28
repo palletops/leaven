@@ -64,7 +64,7 @@ numbers via a `core.async` channel.  We implement the `Startable` and
 ```clj
 (require '[clojure.core.async :as async]
          '[com.palletops.leaven :as leaven]
-         '[com.palletops.leaven.protocols :refer [Startable Stoppable])
+         '[com.palletops.leaven.protocols :refer [Startable Stoppable]])
 
 (defrecord Counter [init-val channel loop-chan]
   Startable
@@ -155,7 +155,7 @@ We'll use these components to define a system
   (let [c1 (async/chan)]
     (Evens.
       (map->Counter {:init-val 1 :channel c1})
-      (map->Doubler {:in-chan c :out-chan out-chan}))))
+      (map->Doubler {:in-chan c1 :out-chan out-chan}))))
 
 (def c (async/chan))
 (def sys (evens c))
