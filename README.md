@@ -64,7 +64,7 @@ numbers via a `core.async` channel.  We implement the `Startable` and
 ```clj
 (require '[clojure.core.async :as async]
          '[com.palletops.leaven :as leaven]
-         '[com.palletops.leaven.protocols :refer [Startable Stoppable])
+         '[com.palletops.leaven.protocols :refer [Startable Stoppable]])
 
 (defrecord Counter [init-val channel loop-chan]
   Startable
